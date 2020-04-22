@@ -1,0 +1,11 @@
+# pr0logas
+##: 2020-04-22
+
+// Where to redirect port
+iptables -t nat -A PREROUTING -i enp0s3 -p tcp --dport 2106 -j DNAT --to $RedirectExntityExtIP:port  
+
+// Where to send back the response (directly to requester or this proxy? [place LAN IP IF proxy behind the NAT]) - (make it look like proxyVM is making the request not real origin)
+iptables -t nat -A POSTROUTING -o enp0s3 -p tcp --dport 2106 -j SNAT --to-source $proxyLANorExtIP 
+
+// Finally, tell APP endpoind (the redirected port entity) where to send back the response of request. (make it look like response is coming from proxyVM)
+iptables -t nat -A POSTROUTING -p tcp --sport 2106 -j SNAT --to-source $proxyExternalIP //
