@@ -9,3 +9,6 @@ iptables -t nat -A POSTROUTING -o enp0s3 -p tcp --dport 2106 -j SNAT --to-source
 
 // Finally, tell APP endpoind (the redirected port entity) where to send back the response of request. (make it look like response is coming from proxyVM)
 iptables -t nat -A POSTROUTING -p tcp --sport 2106 -j SNAT --to-source $proxyExternalIP //
+
+# Status
+iptables -nvL -t nat
